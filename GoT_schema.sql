@@ -202,7 +202,7 @@ UPDATE GoTHouses SET HeadId = (SELECT id FROM GoTPeople WHERE FirstName = 'Howla
 WHERE Name = 'Reed';
 
 INSERT INTO GoTPeople (FirstName, LastName, Occupation, Status, HouseId)
-VALUES ('Frey', 'Walder', 'Lord', 'Deceased', (SELECT id FROM GoTHouses WHERE Name = 'Frey'));
+VALUES ('Walder', 'Frey', 'Lord', 'Deceased', (SELECT id FROM GoTHouses WHERE Name = 'Frey'));
 
 INSERT INTO GoTTerritories (Name, Climate, Location, Continent, RuledById)
 VALUES ('Casterly Rock', 'Warm', 'Westerlands', 'Westeros', (SELECT id FROM GoTHouses WHERE Name = 'Lannister'));
