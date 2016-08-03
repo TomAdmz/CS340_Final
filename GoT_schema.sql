@@ -117,9 +117,6 @@ INSERT INTO GoTHouses (Name, Colors, Sigil, HouseWords)
 VALUES ('Karstark', 'White and Black', 'Sunburst', 'The Sun of Winter.' );
 
 INSERT INTO GoTHouses (Name, Colors, Sigil, HouseWords)
-VALUES ('Stark', 'Grey, White and Green', 'Direwolf', 'Winter is coming.' );
-
-INSERT INTO GoTHouses (Name, Colors, Sigil, HouseWords)
 VALUES ('Martell', 'Red, Gold and Orange', 'Spear pierced Sun', 'Unbowed, Unbent, Unbroken.' );
 
 INSERT INTO GoTHouses (Name, Colors, Sigil, HouseWords)
