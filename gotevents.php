@@ -56,23 +56,22 @@ if($mysqli->connect_errno){
         </div>
       </div>
     </nav>
-    <h1>GoT People Table:</h1>
+    <h1>GoT Events Table:</h1>
 <div class="table-responsive">
 <table class="table table-sm table-striped table-hover">
-	<h3 class="text-center">GoT People</h3>
+	<h3 class="text-center">GoT Events</h3>
   <thead class="thead thead-default">
 		<tr>
-			<th>First Name</th>
-			<th>Last Name</th>
-			<th>Occupation</th>
-      <th>Status</th>
-      <th>House</th>
+			<th>Name</th>
+			<th>Location</th>
+			<th>Casualties</th>
+      <th>Type</th>
 		</tr>
   </thead>
 <?php
 // create the sql query
-if(!($stmt = $mysqli->prepare("SELECT p.FirstName, p.LastName, p.Occupation, p.Status, h.Name FROM GoTPeople p
-    INNER JOIN GoTHouses h ON p.HouseId = h.id ORDER BY p.LastName"))){
+if(!($stmt = $mysqli->prepare("SELECT e.Name, t.Name, t.Location, e.Casualties, e.Type FROM GoTEvents e
+    INNER JOIN GoTTerritories t ON e.LocationId = t.id ORDER BY e.Name"))){
   echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
 }
               
@@ -80,12 +79,12 @@ if(!$stmt->execute()){
   echo "Execute failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
 }
 // bind the results to variables
-if(!$stmt->bind_result($FirstName, $LastName, $Occupation, $Status, $HouseId)){
+if(!$stmt->bind_result($Name, $tName, $Location, $Casualties, $Type)){
 	echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
 }
 // operate for each returned row. Inline the html.
 while($stmt->fetch()){
- echo "<tr>\n<td>" . $FirstName . "</td>\n<td>" . $LastName . "</td>\n<td>" . $Occupation . "</td>\n<td>" . $Status . "</td><td>". $HouseId . "</td>\n</tr>\n";
+ echo "<tr>\n<td>" . $Name . "</td>\n<td>" . $tName . " - " . $Location . "</td>\n<td>" . $Casualties . "</td>\n<td>" . $Type . "</td>\n</tr>\n";
 }
 // close out the sql query.
 $stmt->close();
@@ -131,34 +130,31 @@ $stmt->close();
 
 
 <div class="form">
-<h3>Update or Add Person</h3>
+<h3>Update or Add Event</h3>
 
-<form class="form-block" method="post" action="gotpeople_add_update.php">
+<form class="form-block" method="post" action="gotevents_add_update.php">
 
     <fieldset class="form-group">
-      <legend>Person Name</legend>
-      <p>First Name: <input type="text" name="FirstName" /></p>
-      <p>Last Name: <input type="text" name="LastName" /></p>
+      <legend>Event Name</legend>
+      <p>Name: <input type="text" name="Name" /></p>
     </fieldset>
 
     <fieldset class="form-group">
-      <legend>Occupation and Status</legend>
-      <p>Occupation: <input type="text" name="Occupation" /></p>
-      <p>Status:</p>
+      <legend>Type and Casualties</legend>
+      <p>Type: <input type="text" name="Type" /></p>
+      <p>Casualties:</p>
       <div class="radio">
-      <label><input type="radio" name="Status" value="Alive">Alive</label>
-      <label><input type="radio" name="Status" value="Deceased">Deceased</label>
-      <label><input type="radio" name="Status" value="Unknown">Unknown</label>
-      <label><input type="radio" name="Status" value="Resurrected">Resurrected</label>
+      <label><input type="radio" name="Casualties" value="1">Yes</label>
+      <label><input type="radio" name="Casualties" value="0">No</label>
       </div>
     </fieldset>
 
     <fieldset class="form-group">
-      <legend>House</legend>
-      <select name="HouseId">
+      <legend>Location</legend>
+      <select name="LocationId">
 <?php
 //Generates a list of athlete team names, grabs id as well to store.
-if(!($stmt = $mysqli->prepare("SELECT id, Name FROM GoTHouses"))){
+if(!($stmt = $mysqli->prepare("SELECT id, Name FROM GoTTerritories"))){
   echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
 }
 if(!$stmt->execute()){
