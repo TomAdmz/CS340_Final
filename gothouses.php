@@ -95,20 +95,19 @@ $stmt->close();
 
 <div class="table-responsive">
 <table class="table table-sm table-striped table-hover">
-  <h3 class="text-center">Events people were involed in:</h3>
+  <h3 class="text-center">Territores Ruled by Each House:</h3>
   <thead class="thead thead-default">
     <tr>
-      <th>First Name</th>
-      <th>Last Name</th>
-      <th>Event</th>
-      <th>Status</th>
+      <th>House Name</th>
+      <th>Territory Name</th>
+      <th>Region</th>
+      <th>Continent</th>
     </tr>
   </thead>
   <?php
 // create the sql query
-if(!($stmt = $mysqli->prepare("SELECT p.FirstName, p.LastName, e.Name, p.Status FROM GoTPeople p
-    INNER JOIN GoTPeopleEvents gpe ON p.id = gpe.pid 
-    INNER JOIN GoTEvents e ON gpe.eid = e.id GROUP BY p.FirstName ORDER BY e.Name"))){
+if(!($stmt = $mysqli->prepare("SELECT h.Name, t.Name, t.Location, t.Continent FROM GoTHouses h
+    INNER JOIN GoTTerritories t ON t.RuledById = h.id  ORDER BY h.Name"))){
   echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
 }
               
@@ -116,12 +115,12 @@ if(!$stmt->execute()){
   echo "Execute failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
 }
 // bind the results to variables
-if(!$stmt->bind_result($FirstName, $LastName, $Event, $Status)){
+if(!$stmt->bind_result($HouseName, $TerritoryName, $Location, $Continent)){
   echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
 }
 // operate for each returned row. Inline the html.
 while($stmt->fetch()){
- echo "<tr>\n<td>" . $FirstName . "</td>\n<td>" . $LastName . "</td>\n<td>" . $Event . "</td><td>". $Status . "</td>\n</tr>\n";
+ echo "<tr>\n<td>" . $HouseName . "</td>\n<td>" . $TerritoryName . "</td>\n<td>" . $Location . "</td><td>". $Continent . "</td>\n</tr>\n";
 }
 // close out the sql query.
 $stmt->close();
@@ -148,9 +147,9 @@ $stmt->close();
     </fieldset>
 
     <fieldset class="form-group">
-      <legend>House Head</legend>
+      <legend>House Head **ON UPDATE ONLY**</legend>
       <select name="HeadId">
-        <option value="NULL">None</option>
+        <option value="">None</option>
 <?php
 //Generates a list of athlete team names, grabs id as well to store.
 if(!($stmt = $mysqli->prepare("SELECT id, FirstName, LastName FROM GoTPeople"))){
