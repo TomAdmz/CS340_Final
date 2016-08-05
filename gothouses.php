@@ -48,7 +48,7 @@ if($mysqli->connect_errno){
                   <a href="gotevents.php">GoT - Events</a>
                 </li>
                 <li>
-                  <a href="gotpeoplevents.php">GoT - PeopleEvents</a>
+                  <a href="gotpeopleevents.php">GoT - PeopleEvents</a>
                 </li>
               </ul>
             </li>
