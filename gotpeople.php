@@ -157,7 +157,7 @@ $stmt->close();
       <legend>House</legend>
       <select name="HouseId">
 <?php
-//Generates a list of athlete team names, grabs id as well to store.
+//Generates a list of GoTHouses names, grabs id as well to store.
 if(!($stmt = $mysqli->prepare("SELECT id, Name FROM GoTHouses"))){
   echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
 }

@@ -151,7 +151,7 @@ $stmt->close();
       <select name="HeadId">
         <option value="">None</option>
 <?php
-//Generates a list of athlete team names, grabs id as well to store.
+//Generates a list of GoTPeople names, grabs id as well to store.
 if(!($stmt = $mysqli->prepare("SELECT id, FirstName, LastName FROM GoTPeople"))){
   echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
 }

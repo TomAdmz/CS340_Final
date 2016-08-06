@@ -153,7 +153,7 @@ $stmt->close();
       <legend>Location</legend>
       <select name="LocationId">
 <?php
-//Generates a list of athlete team names, grabs id as well to store.
+//Generates a list of GoTTerritory names, grabs id as well to store.
 if(!($stmt = $mysqli->prepare("SELECT id, Name FROM GoTTerritories"))){
   echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
 }
