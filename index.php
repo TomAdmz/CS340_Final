@@ -56,9 +56,12 @@ if($mysqli->connect_errno){
         </div>
       </div>
     </nav>
+<div class="container-fluid text-center">
+  <img src="gotimg.jpg">
+</div>
 <div class="table-responsive">
 <table class="table table-sm table-striped table-hover">
-	<h3 class="text-center">GoT People</h3>
+	<h3 class="text-center">Search for a person:</h3>
   <thead class="thead thead-default">
 		<tr>
 			<th>First Name</th>
@@ -66,30 +69,55 @@ if($mysqli->connect_errno){
 			<th>Occupation</th>
       <th>Status</th>
       <th>House</th>
+      <th>Territories Owned By House</th>
 		</tr>
   </thead>
 <?php
+if( isset( $_POST['Search'] ) ) {
+
+$FirstName = $_POST['FirstName'];
+$LastName = $_POST['LastName'];
 // create the sql query
-if(!($stmt = $mysqli->prepare("SELECT p.FirstName, p.LastName, p.Occupation, p.Status, h.Name FROM GoTPeople p
-    INNER JOIN GoTHouses h ON p.HouseId = h.id ORDER BY p.LastName"))){
+if(!($stmt = $mysqli->prepare("SELECT p.FirstName, p.LastName, p.Occupation, p.Status, h.Name, COUNT(t.Name) FROM GoTPeople p
+    INNER JOIN GoTHouses h ON p.HouseId = h.id
+    LEFT JOIN GoTTerritories t ON h.id = t.RuledById
+    WHERE p.FirstName = '$FirstName' AND p.LastName = '$LastName'"))){
   echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
 }
               
 if(!$stmt->execute()){
   echo "Execute failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
 }
+
 // bind the results to variables
-if(!$stmt->bind_result($FirstName, $LastName, $Occupation, $Status, $HouseId)){
-	echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
+if(!$stmt->bind_result($FirstName, $LastName, $Occupation, $Status, $HouseId, $Land)){
+  echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
 }
+
 // operate for each returned row. Inline the html.
 while($stmt->fetch()){
- echo "<tr>\n<td>" . $FirstName . "</td>\n<td>" . $LastName . "</td>\n<td>" . $Occupation . "</td>\n<td>" . $Status . "</td><td>". $HouseId . "</td>\n</tr>\n";
+ echo "<tr>\n<td>" . $FirstName . "</td>\n<td>" . $LastName . "</td>\n<td>" . $Occupation . "</td>\n<td>" . $Status . "</td>\n<td>". $HouseId . "</td><td>". $Land . "</td>\n</tr>\n";
 }
 // close out the sql query.
 $stmt->close();
+}
 ?>
 </table>
+</div>
+
+<div class="form">
+<h3>Search for information about Person</h3>
+
+<form class="form-block" method="post" action="index.php">
+
+    <fieldset class="form-group">
+      <legend>Person Name</legend>
+      <p>First Name: <input type="text" name="FirstName" /></p>
+      <p>Last Name: <input type="text" name="LastName" /></p>
+    </fieldset>
+
+    <input type="submit" name="Search" value="Search" />
+  </form>
 </div>
 
 <br>
